@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181595273659",
+    "project_id": "message-b5ce3",
+    "storage_bucket": "message-b5ce3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181595273659:android:7a761900dc7bd1a223ac9e",
+        "android_client_info": {
+          "package_name": "com.example.message"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtKCH7NtYqVxd29skYo0kM-N6kfn7Q5yQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
