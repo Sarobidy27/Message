@@ -1,20 +1,23 @@
 package com.example.message.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import android.net.Uri
 
 @Composable
 fun LoginScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     val auth = FirebaseAuth.getInstance()
 
@@ -32,7 +35,8 @@ fun LoginScreen(navController: NavController) {
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -41,7 +45,15 @@ fun LoginScreen(navController: NavController) {
             value = password,
             onValueChange = { password = it },
             label = { Text("Mot de passe") },
-            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val icon = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                val description = if (passwordVisible) "Cacher" else "Afficher"
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = icon, contentDescription = description)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -59,7 +71,6 @@ fun LoginScreen(navController: NavController) {
                         navController.navigate("conversation_list") {
                             popUpTo("login") { inclusive = true }
                         }
-
                     }
                     .addOnFailureListener {
                         error = "Connexion échouée : ${it.message}"

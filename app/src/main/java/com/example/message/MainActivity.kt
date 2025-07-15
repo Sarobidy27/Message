@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
                     composable("message/{receiverId}") { backStackEntry ->
                         MessageScreen(backStackEntry)
                     }
+                    composable("profile") { ProfileScreen(navController) }
                 }
             }
         }

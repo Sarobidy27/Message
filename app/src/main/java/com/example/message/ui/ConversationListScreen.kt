@@ -40,7 +40,6 @@ fun ConversationListScreen(navController: NavController) {
     var usernames by remember { mutableStateOf(mapOf<String, String>()) }
     var selectedFilter by remember { mutableStateOf("All") }
 
-
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
     var showDialog by remember { mutableStateOf(false) }
     var conversationToDelete by remember { mutableStateOf<ConversationItem?>(null) }
@@ -60,6 +59,7 @@ fun ConversationListScreen(navController: NavController) {
         }
     }
 
+    // 🔁 MESSAGES
     LaunchedEffect(Unit) {
         val msgRef = database.child("messages")
         msgRef.addValueEventListener(object : ValueEventListener {
@@ -154,13 +154,10 @@ fun ConversationListScreen(navController: NavController) {
             TopAppBar(
                 title = { Text("Conversations") },
                 actions = {
-                    TextButton(onClick = {
-                        FirebaseAuth.getInstance().signOut()
-                        navController.navigate("login") {
-                            popUpTo("conversation_list") { inclusive = true }
-                        }
+                    IconButton(onClick = {
+                        navController.navigate("profile")
                     }) {
-                        Text("Déconnexion", color = Color.Red, fontWeight = FontWeight.Bold)
+                        Icon(Icons.Default.AccountCircle, contentDescription = "Profil")
                     }
                 }
             )
