@@ -60,7 +60,7 @@ fun NewMessageScreen(navController: NavController) {
                         val messageData = mapOf(
                             "senderId" to senderUid,
                             "receiverId" to recipientUid,
-                            "message" to message,
+                            "content" to message,
                             "timestamp" to timestamp,
                             "read" to false
                         )
