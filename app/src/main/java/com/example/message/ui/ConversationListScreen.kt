@@ -40,7 +40,6 @@ fun ConversationListScreen(navController: NavController) {
     var usernames by remember { mutableStateOf(mapOf<String, String>()) }
     var selectedFilter by remember { mutableStateOf("All") }
 
-    // Liste Favorites supprimée
 
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
     var showDialog by remember { mutableStateOf(false) }
@@ -61,7 +60,6 @@ fun ConversationListScreen(navController: NavController) {
         }
     }
 
-    // 🔁 MISE À JOUR EN TEMPS RÉEL DES CONVERSATIONS PAR MESSAGES
     LaunchedEffect(Unit) {
         val msgRef = database.child("messages")
         msgRef.addValueEventListener(object : ValueEventListener {
@@ -113,7 +111,7 @@ fun ConversationListScreen(navController: NavController) {
         })
     }
 
-    // 🔁 CONVERSATIONS PAR `conversations/` MÊME SANS MESSAGE
+    // 🔁 CONVERSATIONS
     LaunchedEffect(Unit) {
         val convRef = database.child("conversations").child(currentUserId)
         convRef.addValueEventListener(object : ValueEventListener {
@@ -176,13 +174,13 @@ fun ConversationListScreen(navController: NavController) {
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // Filtres (sans Favorites)
+            // Filtres
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
                     .padding(bottom = 16.dp)
             ) {
-                listOf("All", "Unread").forEach { label ->  // "Favorites" supprimé
+                listOf("All", "Unread").forEach { label ->
                     val selected = selectedFilter == label
                     Button(
                         onClick = { selectedFilter = label },
@@ -298,7 +296,6 @@ fun ConversationListScreen(navController: NavController) {
                 }
             }
 
-            // Dialog de confirmation
             if (showDialog && conversationToDelete != null) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
