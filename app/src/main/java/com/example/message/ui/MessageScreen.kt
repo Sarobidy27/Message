@@ -65,8 +65,6 @@ fun MessageScreen(backStackEntry: NavBackStackEntry) {
     var editingMessageId by remember { mutableStateOf<String?>(null) }
     var showDialog by remember { mutableStateOf(false) }
     var messageToDelete by remember { mutableStateOf<MessageWithId?>(null) }
-    var showImageDeleteConfirm by remember { mutableStateOf(false) }
-    var imageToDelete by remember { mutableStateOf<MessageWithId?>(null) }
     var selectedMessageId by remember { mutableStateOf<String?>(null) }
     var expirationDurationSeconds by remember { mutableStateOf(0) }
     var userName by remember { mutableStateOf("...") }
@@ -278,15 +276,6 @@ fun MessageScreen(backStackEntry: NavBackStackEntry) {
                                     Text("Supprimer", color = Color.Red)
                                 }
                             }
-                            if (hasImage) {
-                                TextButton(onClick = {
-                                    imageToDelete = msgWithId
-                                    showImageDeleteConfirm = true
-                                    selectedMessageId = null
-                                }) {
-                                    Text("Supprimer l'image", color = Color.Red)
-                                }
-                            }
                         }
                     }
                 }
@@ -383,28 +372,6 @@ fun MessageScreen(backStackEntry: NavBackStackEntry) {
                     },
                     dismissButton = {
                         TextButton(onClick = { showDialog = false }) {
-                            Text("Annuler")
-                        }
-                    }
-                )
-            }
-
-            if (showImageDeleteConfirm && imageToDelete != null) {
-                AlertDialog(
-                    onDismissRequest = { showImageDeleteConfirm = false },
-                    title = { Text("Confirmation") },
-                    text = { Text("Voulez-vous vraiment supprimer cette image ?") },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            database.child("messages").child(conversationId).child(imageToDelete!!.id)
-                                .child("imageBase64").removeValue()
-                            showImageDeleteConfirm = false
-                        }) {
-                            Text("Supprimer", color = Color.Red)
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showImageDeleteConfirm = false }) {
                             Text("Annuler")
                         }
                     }
