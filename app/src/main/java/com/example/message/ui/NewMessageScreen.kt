@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
 @Composable
 fun NewMessageScreen(navController: NavController) {
@@ -43,20 +44,36 @@ fun NewMessageScreen(navController: NavController) {
 
         Button(onClick = {
             if (recipientName.isNotBlank() && message.isNotBlank() && senderUid != null) {
-                // Recherche utilisateur par nom (simplifié ici)
+                // Recherche de l'utilisateur par nom
                 db.child("users").get().addOnSuccessListener { snapshot ->
-                    val recipientUid = snapshot.children.firstOrNull {
+                    val recipientEntry = snapshot.children.firstOrNull {
                         it.child("Nom").value == recipientName
-                    }?.key
+                    }
+
+                    val recipientUid = recipientEntry?.key
 
                     if (recipientUid != null) {
+                        val conversationId = listOf(senderUid, recipientUid).sorted().joinToString("_")
+
+                        val timestamp = System.currentTimeMillis()
+
                         val messageData = mapOf(
-                            "from" to senderUid,
-                            "to" to recipientUid,
-                            "message" to message
+                            "senderId" to senderUid,
+                            "receiverId" to recipientUid,
+                            "message" to message,
+                            "timestamp" to timestamp,
+                            "read" to false
                         )
-                        db.child("messages").push().setValue(messageData)
+
+
+                        db.child("messages").child(conversationId).push().setValue(messageData)
+
+                        db.child("conversations").child(senderUid).child(recipientUid).setValue(true)
+                        db.child("conversations").child(recipientUid).child(senderUid).setValue(true)
+
                         confirmation = "Message envoyé !"
+
+                        navController.popBackStack()
                     } else {
                         confirmation = "Utilisateur non trouvé."
                     }
